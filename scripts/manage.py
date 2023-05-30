@@ -2,7 +2,7 @@
 
 import sys, os, re
 import json
-import yaml
+import yaml, toml
 from pathlib import Path
 import argparse
 import traceback
@@ -149,6 +149,18 @@ def process_json(input_json):
       dbnew.write(output)
       print(output)
 
+def check_data_at(output_toml, glob_pattern):
+   for f in output_toml.glob(glob_pattern):
+      try:
+         toml.load(f)
+      except Exception as ex:
+         exc_type, _, exc_tb = sys.exc_info()
+         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+         print("ERROR: toml check ({0}) {1} {2} {3}".format(str(ex), exc_type, fname, exc_tb.tb_lineno))
+         traceback.print_exc()
+         sys.exit(1)
+   return
+
 if args.input:
    input = vars(args)['input']
    print(f"INFO: processing [{input}]...")
@@ -159,6 +171,7 @@ if args.input:
          print(f"INFO: {input} loaded.")
          process_json(input_json)
          generate_data_from( home / "data" / "database.yaml.new", home / "data" / "s3" )
+         check_data_at( home / "data" / "s3" , "*/*.toml")
       except Exception as ex:
          exc_type, _, exc_tb = sys.exc_info()
          fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
