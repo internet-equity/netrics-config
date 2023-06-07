@@ -1,0 +1,11 @@
+Package: nm-mgmt-config
+Version: 0.1.1
+Section: custom
+Priority: optional
+Architecture: arm64
+Essential: no
+Installed-Size: 6840487
+Maintainer: gmartins
+Homepage: https://github.com/internet-equity/nm-mgmt-config
+Description: Netrics Configuration Client
+Depends: ca-certificates
