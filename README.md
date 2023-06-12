@@ -12,6 +12,9 @@ TBD: plugins can be implemented to provide a logic for paramenter generation (ri
 * <b>netrics-config</b> will use and write to `$HOME/.netrics-config/` in order to operate.
 * No sensitive data is shared along with these configuration.
 
+## Config file / Template
+
+A typical config template file (Jinja) can be found [here](https://github.com/internet-equity/netrics-config/tree/main/templates/default).
 
 ## Steps to operate an existing data
 1. Establish the AWS bucket credentials through AWS configure;
