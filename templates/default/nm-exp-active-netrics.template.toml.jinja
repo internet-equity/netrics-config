@@ -19,9 +19,10 @@ debhash = "{{ DEBHASH }}"
 
 [cron]
 netrics="""
-*/5 * * * * netrics env USER=$LOGNAME /usr/local/bin/netrics -p -d -t -b {{ enable_ndev }} {{ no_ipquery }} {{ upload }} >>{{ log }} 2>&1 
+*/5 * * * * netrics env USER=$LOGNAME /usr/local/bin/netrics -p -d -t -b {{ enable_ndev }} -P httping  {{ no_ipquery }} {{ upload }} >>{{ log }} 2>&1 
 {{ SPEEDTEST_TIME }} {{ speedtest_hour }} * * * netrics env USER=$LOGNAME /usr/local/bin/netrics -s -l {{ limit_consumption }} {{ no_ipquery }} {{ upload }} >>{{ log }} 2>&1 
 {{ IPERF_TIME }} {{ iperf_hour }} * * * netrics env USER=$LOGNAME /usr/local/bin/netrics -i {{ limit_consumption }} {{ no_ipquery }} {{ upload }} >{{ log }} 2>&1
+0 1,5,13 * * * netrics env USER=$LOGNAME /usr/local/bin/netrics -P goresp >>{{ log }} 2>&1
 0 0 1 * * netrics env USER=$LOGNAME /usr/local/bin/netrics -R >>{{ log }} 2>&1
 {{ VCA_TIME }} {{ VCA_TIME_2 }} * * * netrics env USER=$LOGNAME /usr/local/bin/netrics -P vca {{ no_ipquery }} {{ upload }} >{{ log }} 2>&1 
 """
@@ -36,6 +37,7 @@ netrics="""
     "www.wikipedia.org" = "wikipedia"
     "www.youtube.com" = "youtube"
     "www.facebook.com" = "facebook"
+    "www.duckduckgo.com" = "duckduckgo"
     "www.chicagotribune.com" = "tribune"
     "chicago.suntimes.com" = "suntimes"
     "cs.uchicago.edu" = "uchicago"
@@ -51,7 +53,7 @@ netrics="""
     "77.67.119.129" = "Paris"
     "195.89.146.193" = "Stockholm"
     "190.98.158.1" = "Sao_Paulo"
-    "abbott.cs.uchicago.edu:4043" = "abbott"
+#    "abbott.cs.uchicago.edu:4043" = "abbott"
 
 [limit_consumption]
     measured_down = 5
@@ -85,7 +87,7 @@ netrics="""
 
 [httping]
     c = 2
-    targets = ["www.google.com","www.wikipedia.org"]
+    targets = ["www.google.com","www.wikipedia.org","www.duckduckgo.com","www.facebook.com","www.amazon.com","www.youtube.com"]
 
 [goresp]
     targets = ["abbott.cs.uchicago.edu:4043"]
