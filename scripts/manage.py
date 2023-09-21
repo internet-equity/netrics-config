@@ -7,6 +7,7 @@ from pathlib import Path
 import argparse
 import traceback
 from jinja2 import Template 
+import random
 
 home = Path.home() / ".netrics-config"
 
@@ -80,12 +81,12 @@ def gen_config(dev, fleet):
       'no_ipquery': "",
       'upload': "",
       'limit_consumption': "--limit-consumption",
-      'SPEEDTEST_TIME': "0",
-      'speedtest_hour': "0",
+      'SPEEDTEST_TIME': str(random.randint(1, 59)),
+      'speedtest_hour': "*/3",
       'VCA_TIME': "0",
       'VCA_TIME_2': "0",
-      'IPERF_TIME': "0",
-      'iperf_hour': "0",
+      'IPERF_TIME': str(random.randint(1, 59)),
+      'iperf_hour': "*/3",
       'max_monthly_consumption_gb' : "200",
       'max_monthly_tests' : "200",
       'iperf_host': "abbott.cs.uchicago.edu",
@@ -133,6 +134,9 @@ def process_json(input_json):
                  existing = database[k['uuid']]
          
          fleet_canonical = re.sub(r'^[a-z]+/', '',k['fleet']).split("-")[0]
+         if fleet_canonical != 'protek':
+            continue
+
 
          if existing is not None:
             database_new[k['uuid']] = existing
@@ -141,7 +145,7 @@ def process_json(input_json):
             { 
                'fleet' : fleet_canonical,
                'device_name' : k['device_name'],
-               'overwrite' : True,
+               'overwrite' : False, #false
                'config' : gen_config(k, fleet_canonical)
             }
             
